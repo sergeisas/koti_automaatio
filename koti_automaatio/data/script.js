@@ -52,11 +52,11 @@ var gaugeTemp = new LinearGauge({
 }).draw();
   
 // Create Humidity Gauge
-var gaugeHum = new RadialGauge({
-  renderTo: 'gauge-humidity',
+var gaugePre = new RadialGauge({
+  renderTo: 'gauge-pressure',
   width: 300,
   height: 300,
-  units: "Humidity (%)",
+  units: "Pressure (%)",
   minValue: 0,
   maxValue: 100,
   colorValueBoxRect: "#049faa",
@@ -104,9 +104,10 @@ function getReadings(){
       var myObj = JSON.parse(this.responseText);
       console.log(myObj);
       var temp = myObj.temperature;
-      var hum = myObj.humidity;
+      var pre = myObj.humidity;
+
       gaugeTemp.value = temp;
-      gaugeHum.value = hum;
+      gaugePre.value = pre;
     }
   }; 
   xhr.open("GET", "/readings", true);
@@ -135,6 +136,6 @@ if (!!window.EventSource) {
     var myObj = JSON.parse(e.data);
     console.log(myObj);
     gaugeTemp.value = myObj.temperature;
-    gaugeHum.value = myObj.humidity;
+    gaugePre.value = myObj.pressure;
   }, false);
 }

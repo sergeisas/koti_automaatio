@@ -12,7 +12,7 @@
 #include <ESPAsyncWebServer.h>
 #include "SPIFFS.h"
 #include <Arduino_JSON.h>
-#include <Adafruit_BME280.h>
+#include <Adafruit_BMP280.h>
 #include <Adafruit_Sensor.h>
 
 // Replace with your network credentials
@@ -33,11 +33,11 @@ unsigned long lastTime = 0;
 unsigned long timerDelay = 10000;
 
 // Create a sensor object
-Adafruit_BME280 bme; // BME280 connect to ESP32 I2C (GPIO 21 = SDA, GPIO 22 = SCL)
+Adafruit_BMP280 bmp; // BME280 connect to ESP32 I2C (GPIO 21 = SDA, GPIO 22 = SCL)
 
 // Init BME280
-void initBME(){
-  if (!bme.begin(0x76)) {
+void initBMP(){
+  if (!bmp.begin(0x76)) {
     Serial.println("Could not find a valid BME280 sensor, check wiring!");
     while (1);
   }
@@ -45,8 +45,8 @@ void initBME(){
 
 // Get Sensor Readings and return JSON object
 String getSensorReadings(){
-  readings["temperature"] = String(bme.readTemperature());
-  readings["humidity"] =  String(bme.readHumidity());
+  readings["temperature"] = String(bmp.readTemperature());
+  readings["humidity"] =  String(bmp.readPressure());
   String jsonString = JSON.stringify(readings);
   return jsonString;
 }
@@ -74,7 +74,7 @@ void initWiFi() {
 void setup() {
   // Serial port for debugging purposes
   Serial.begin(115200);
-  initBME();
+  initBMP();
   initWiFi();
   initSPIFFS();
 
